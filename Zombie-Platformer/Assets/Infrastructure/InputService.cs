@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InputService : MonoBehaviour
+namespace Zombie_Platformer.Infrastructure
 {
-    // Start is called before the first frame update
-    void Start()
+    public class InputService : IInputService
     {
-        
-    }
+        private const string HORIZONTAL_AXIS = "Horizontal";
+        private const string FIRE = "Fire1";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public float HorizontalAxis => Input.GetAxis(HORIZONTAL_AXIS);
+        public bool Fire => Input.GetButton(FIRE);
     }
 }

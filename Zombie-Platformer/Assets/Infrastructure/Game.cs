@@ -1,64 +1,71 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class Game : MonoBehaviour
+namespace Zombie_Platformer.Infrastructure
 {
-    private GameStateMachine _gameStateMachine;
-    
-    void Start()
+    public class Game : MonoBehaviour
     {
-        _gameStateMachine = new GameStateMachine();
-        _gameStateMachine.Enter<StartGame>();
-    }
-}
+        private GameStateMachine _gameStateMachine;
+        private IFactoryActors _factoryActors;
 
-public class GameStateMachine
-{
-    private Dictionary<Type, IState> _states;
-
-    private IState _currentState;
-    
-    public GameStateMachine()
-    {
-        _states = new Dictionary<Type, IState>
+        [Inject]
+        private void Constructor(IFactoryActors factoryActors)
         {
-            [typeof(StartGame)] = new StartGame(),
-            [typeof(EndGame)] = new EndGame(),
-        };
+            _factoryActors = factoryActors;
+        }
+        
+        void Start()
+        {
+            _gameStateMachine = new GameStateMachine(_factoryActors);
+            _gameStateMachine.Enter<StartGame>();
+        }
     }
 
-    public void Enter<TState>() where TState : IState
+    public class GameStateMachine
     {
-        _currentState?.Exit();
-        _currentState = _states[typeof(TState)];
-        _currentState.Enter();
-    }
-}
+        private Dictionary<Type, IState> _states;
 
-public interface IState
-{
-    public void Enter();
-    public void Exit();
-}
+        private IState _currentState;
 
-public class StartGame : IState
-{
-    public void Enter()
-    {
-    }
-    
-    public void Exit()
-    {
-    }
-}
+        public GameStateMachine(IFactoryActors factoryActors)
+        {
+            _states = new Dictionary<Type, IState>
+            {
+                [typeof(StartGame)] = new StartGame(factoryActors),
+                [typeof(EndGame)] = new EndGame(),
+            };
+        }
 
-public class EndGame : IState
-{
-    public void Enter()
-    {
+        public void Enter<TState>() where TState : IState
+        {
+            _currentState?.Exit();
+            _currentState = _states[typeof(TState)];
+            _currentState.Enter();
+        }
     }
-    public void Exit()
+
+    public class StartGame : IState
     {
+        private readonly IFactoryActors _factoryActors;
+        
+        public StartGame(IFactoryActors factoryActors)
+        {
+            _factoryActors = factoryActors;
+        }
+
+        public void Enter()
+        {
+            _factoryActors.CreatePlayer();
+        }
+
+        public void Exit() {}
+    }
+
+    public class EndGame : IState
+    {
+        public void Enter() {}
+        public void Exit() {}
     }
 }

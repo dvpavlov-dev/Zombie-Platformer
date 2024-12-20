@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
-public interface IFactoryActors
+
+namespace Zombie_Platformer.Infrastructure
 {
-    public GameObject CreatePlayer();
+    public interface IFactoryActors
+    {
+        public GameObject CreatePlayer();
+    }
 }

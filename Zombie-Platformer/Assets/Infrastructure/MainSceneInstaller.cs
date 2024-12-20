@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
+using Zombie_Platformer.Infrastructure;
 
-public class MainSceneInstaller : MonoBehaviour
+namespace Zombie_Platformer
 {
-    // Start is called before the first frame update
-    void Start()
+    public class MainSceneInstaller : MonoInstaller
     {
-        
-    }
+        [SerializeField] private FactoryActors _factoryActors;
+        [SerializeField] private FactoryBullet _factoryBullet;
 
-    // Update is called once per frame
-    void Update()
-    {
+        public override void InstallBindings()
+        {
+            BindFactoryActors();
+            BindFactoryBullet();
+        }
         
+        private void BindFactoryBullet()
+        {
+            Container
+                .Bind<IFactoryBullet>()
+                .FromInstance(_factoryBullet)
+                .AsSingle();
+        }
+
+        private void BindFactoryActors()
+        {
+            Container
+                .Bind<IFactoryActors>()
+                .FromInstance(_factoryActors)
+                .AsSingle();
+        }
     }
 }

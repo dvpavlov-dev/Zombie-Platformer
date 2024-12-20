@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Zenject;
 
-public class GameInstaller : MonoBehaviour
+namespace Zombie_Platformer.Infrastructure
 {
-    // Start is called before the first frame update
-    void Start()
+    public class GameInstaller : MonoInstaller
     {
-        
-    }
+        public override void InstallBindings()
+        {
+            BindInputService();
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void BindInputService()
+        {
+            Container
+                .Bind<IInputService>()
+                .FromInstance(new InputService())
+                .AsSingle();
+        }
     }
 }

@@ -1,18 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public class IFactoryBullet : MonoBehaviour
+public interface IFactoryBullet
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject GetBullet(Vector3 dir);
+    public void DisposeBullet(GameObject bullet);
 }

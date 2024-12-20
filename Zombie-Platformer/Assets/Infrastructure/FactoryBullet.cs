@@ -1,9 +1,52 @@
-﻿public class FactoryBullet : MonoBehaviour, IFactoryBullet
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class FactoryBullet : MonoBehaviour, IFactoryBullet
 {
     [SerializeField] private GameObject _bulletPrefab;
 
-    public GameObject CreateBullet()
+    private Queue<GameObject> _bulletsPool = new();
+    private GameObject _containerForBullets;
+
+    private void Start()
     {
-        return Instantiate(_bulletPrefab);
+        CreateBulletsPool();
+    }
+
+    public GameObject GetBullet(Vector3 dir)
+    {
+        if (_bulletsPool.Count == 0)
+        {
+            CreateBullet();
+        }
+        
+        GameObject bullet = _bulletsPool.Dequeue();
+        bullet.GetComponent<BulletController>().Init(this, dir);
+        bullet.SetActive(true);
+
+        return bullet;
+    }
+
+    public void DisposeBullet(GameObject bullet)
+    {
+        bullet.SetActive(false);
+        _bulletsPool.Enqueue(bullet);
+    }
+
+    private void CreateBulletsPool()
+    {
+        _containerForBullets = new GameObject("Container for bullet");
+        
+        for (int i = 0; i < 10; i++)
+        {
+            CreateBullet();
+        }
+    }
+    
+    private void CreateBullet()
+    {
+        GameObject bullet = Instantiate(_bulletPrefab, _containerForBullets.transform);
+        bullet.SetActive(false);
+        _bulletsPool.Enqueue(bullet);
     }
 }
