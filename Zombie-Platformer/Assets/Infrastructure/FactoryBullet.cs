@@ -13,7 +13,7 @@ public class FactoryBullet : MonoBehaviour, IFactoryBullet
         CreateBulletsPool();
     }
 
-    public GameObject GetBullet(Vector3 dir)
+    public GameObject GetBullet(Vector3 dir, float damage)
     {
         if (_bulletsPool.Count == 0)
         {
@@ -21,7 +21,7 @@ public class FactoryBullet : MonoBehaviour, IFactoryBullet
         }
         
         GameObject bullet = _bulletsPool.Dequeue();
-        bullet.GetComponent<BulletController>().Init(this, dir);
+        bullet.GetComponent<BulletController>().Init(this, dir, damage);
         bullet.SetActive(true);
 
         return bullet;

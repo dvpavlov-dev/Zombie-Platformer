@@ -9,16 +9,22 @@ namespace Zombie_Platformer.Infrastructure
     {
         private GameStateMachine _gameStateMachine;
         private IFactoryActors _factoryActors;
+        private IGameProcess _gameProcess;
+        private IEnemySpawner _enemySpawner;
+        private IUIController _uiController;
 
         [Inject]
-        private void Constructor(IFactoryActors factoryActors)
+        private void Constructor(IFactoryActors factoryActors, IGameProcess gameProcess, IEnemySpawner enemySpawner, IUIController uiController)
         {
+            _uiController = uiController;
+            _enemySpawner = enemySpawner;
+            _gameProcess = gameProcess;
             _factoryActors = factoryActors;
         }
         
         void Start()
         {
-            _gameStateMachine = new GameStateMachine(_factoryActors);
+            _gameStateMachine = new GameStateMachine(_factoryActors, _gameProcess, _enemySpawner, _uiController);
             _gameStateMachine.Enter<StartGame>();
         }
     }
@@ -29,12 +35,12 @@ namespace Zombie_Platformer.Infrastructure
 
         private IState _currentState;
 
-        public GameStateMachine(IFactoryActors factoryActors)
+        public GameStateMachine(IFactoryActors factoryActors, IGameProcess gameProcess, IEnemySpawner enemySpawner, IUIController uiController)
         {
             _states = new Dictionary<Type, IState>
             {
-                [typeof(StartGame)] = new StartGame(factoryActors),
-                [typeof(EndGame)] = new EndGame(),
+                [typeof(StartGame)] = new StartGame(this, factoryActors, gameProcess, enemySpawner),
+                [typeof(EndGame)] = new EndGame(uiController),
             };
         }
 
@@ -48,24 +54,52 @@ namespace Zombie_Platformer.Infrastructure
 
     public class StartGame : IState
     {
+        private readonly GameStateMachine _gameStateMachine;
         private readonly IFactoryActors _factoryActors;
-        
-        public StartGame(IFactoryActors factoryActors)
+        private readonly IGameProcess _gameProcess;
+        private readonly IEnemySpawner _enemySpawner;
+
+        public StartGame(GameStateMachine gameStateMachine, IFactoryActors factoryActors, IGameProcess gameProcess, IEnemySpawner enemySpawner)
         {
+            _gameStateMachine = gameStateMachine;
             _factoryActors = factoryActors;
+            _gameProcess = gameProcess;
+            _enemySpawner = enemySpawner;
         }
 
         public void Enter()
         {
-            _factoryActors.CreatePlayer();
+            GameObject player = _factoryActors.CreatePlayer();
+            _enemySpawner.StartSpawner(player.transform);
+            
+            _gameProcess.OnGameOver += GameOver;
         }
 
-        public void Exit() {}
+        public void Exit()
+        {
+            _gameProcess.OnGameOver -= GameOver;
+        }
+
+        private void GameOver()
+        {
+            _gameStateMachine.Enter<EndGame>();
+        }
     }
 
     public class EndGame : IState
     {
-        public void Enter() {}
+        private readonly IUIController _uiController;
+        
+        public EndGame(IUIController uiController)
+        {
+            _uiController = uiController;
+        }
+
+        public void Enter()
+        {
+            _uiController.ShowEndWindow();
+        }
+        
         public void Exit() {}
     }
 }

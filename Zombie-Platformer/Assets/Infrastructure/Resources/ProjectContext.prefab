@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2606335863037399608}
   - component: {fileID: 7065556484600994702}
   - component: {fileID: 7687479019420863743}
+  - component: {fileID: 4077453695303307823}
   m_Layer: 0
   m_Name: ProjectContext
   m_TagString: Untagged
@@ -74,3 +75,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00826d1388c00ae43a70c4028645aa24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _configs: {fileID: 4077453695303307823}
+--- !u!114 &4077453695303307823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2786246108546104045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d9e1d57395ee0e44a0686ca723a8b7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerConfig: {fileID: 11400000, guid: 043d47da1aa7d20419a7fcc4e64d9315, type: 2}
+  WeaponConfig: {fileID: 11400000, guid: fd4fac26e7e5ec44db8642c61caae577, type: 2}
+  BaseEnemyConfig: {fileID: 11400000, guid: 340ff35ee30402047ab91ed5ef73bb0f, type: 2}
+  AdvanceEnemyConfig: {fileID: 11400000, guid: 4a1fbaa4f3f9bb24abf3eef1dda5bdee, type: 2}
+  EliteEnemyConfig: {fileID: 11400000, guid: c611172c67877974abcec4907e1e6454, type: 2}
+  TankEnemyConfig: {fileID: 11400000, guid: a988f537ad1f9c240b2553eae82a59de, type: 2}
+  FastEnemyConfig: {fileID: 11400000, guid: 79b452e7e31f6d0408a5d85c109b8be9, type: 2}
