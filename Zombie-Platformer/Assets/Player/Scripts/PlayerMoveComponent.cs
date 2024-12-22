@@ -2,7 +2,7 @@ using UnityEngine;
 using Zenject;
 using Zombie_Platformer.Infrastructure;
 
-namespace Zombie_Platformer
+namespace Zombie_Platformer.Player
 {
     public class PlayerMoveComponent : MonoBehaviour
     {
@@ -30,7 +30,8 @@ namespace Zombie_Platformer
             
             if (_inputService.HorizontalAxis != 0 && !_inputService.Fire)
             {
-                transform.position = new Vector3(transform.position.x + (_inputService.HorizontalAxis * Time.deltaTime * _configs.PlayerConfig.Speed), transform.position.y,transform.position.z);
+                Vector3 dir = Vector3.right * _inputService.HorizontalAxis;
+                transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, _configs.PlayerConfig.Speed * Time.deltaTime);
                 transform.rotation = Quaternion.Euler(0,_inputService.HorizontalAxis < 0 ? 180 : 0, 0);
                 _animator.SetBool("Move", true);
             }

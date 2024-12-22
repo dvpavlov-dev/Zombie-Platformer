@@ -2,77 +2,86 @@ using UnityEngine;
 using Zenject;
 using Zombie_Platformer.Infrastructure;
 
-public class PlayerAttackComponent : MonoBehaviour
+namespace Zombie_Platformer.Player
 {
-    [SerializeField] private Animator _animator;
-    [SerializeField] private Transform _shootPoint;
-    [SerializeField] private AudioSource _audioSource;
-    
-    private IInputService _inputService;
-    private IFactoryBullet _factoryBullet;
-    private IGameProcess _gameProcess;
-    private Configs _configs;
-    private IUIController _uiController;
-
-    private bool _isFire;
-    private int _ammo;
-
-    [Inject]
-    private void Constructor(IInputService inputService, IFactoryBullet factoryBullet, Configs configs, IGameProcess gameProcess, IUIController uiController)
+    public class PlayerAttackComponent : MonoBehaviour
     {
-        _uiController = uiController;
-        _gameProcess = gameProcess;
-        _configs = configs;
-        _factoryBullet = factoryBullet;
-        _inputService = inputService;
-    }
+        [SerializeField] private Animator _animator;
+        [SerializeField] private Transform _shootPoint;
+        [SerializeField] private AudioSource _audioSource;
 
-    private void Start()
-    {
-        _ammo = _configs.WeaponConfig.StartAmmo;
-        _uiController.ShowAmountAmmo(_ammo);
-    }
+        private IInputService _inputService;
+        private IFactoryBullet _factoryBullet;
+        private IGameProcess _gameProcess;
+        private Configs _configs;
+        private IUIController _uiController;
 
-    void Update()
-    {
-        if (_gameProcess.IsGameOver)
+        private bool _isFire;
+        private int _ammo;
+
+        [Inject]
+        private void Constructor(IInputService inputService, IFactoryBullet factoryBullet, Configs configs, IGameProcess gameProcess, IUIController uiController)
         {
-            _animator.SetBool("Fire", false);
-            return;
+            _uiController = uiController;
+            _gameProcess = gameProcess;
+            _configs = configs;
+            _factoryBullet = factoryBullet;
+            _inputService = inputService;
         }
-        
-        if (_inputService.Fire && !_isFire)
+
+        private void Start()
         {
-            _isFire = true;
-            GameObject bullet = _factoryBullet.GetBullet(transform.right, _configs.WeaponConfig.Damage);
-            bullet.transform.position = _shootPoint.position;
-
-            _ammo--;
+            _ammo = _configs.WeaponConfig.StartAmmo;
             _uiController.ShowAmountAmmo(_ammo);
-            _animator.SetBool("Fire", true);
-            _audioSource.Play();
+        }
 
-            if (_ammo <= 0)
+        void Update()
+        {
+            if (_gameProcess.IsGameOver)
             {
-                _gameProcess.IsGameOver = true;
+                _animator.SetBool("Fire", false);
+                return;
             }
-                
-            Invoke(nameof(FireIsOver), 0.2f);
+
+            if (_inputService.Fire)
+            {
+                if(!_isFire)
+                {
+                    _isFire = true;
+                    GameObject bullet = _factoryBullet.GetBullet(transform.right, _configs.WeaponConfig.Damage);
+                    bullet.transform.position = _shootPoint.position;
+
+                    _ammo--;
+                    _uiController.ShowAmountAmmo(_ammo);
+                    _animator.SetBool("Fire", true);
+                    _audioSource.Play();
+
+                    if (_ammo <= 0)
+                    {
+                        _gameProcess.IsGameOver = true;
+                    }
+
+                    Invoke(nameof(FireIsOver), 0.2f);
+                }
+            }
+            else
+            {
+                _animator.SetBool("Fire", false);
+            }
         }
-    }
 
-    private void FireIsOver()
-    {
-        _isFire = false;
-        _animator.SetBool("Fire", false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.GetComponent<DropAmmoController>() is {} ammoDropController)
+        private void FireIsOver()
         {
-            _ammo += ammoDropController.TakeDropAmmo();
-            _uiController.ShowAmountAmmo(_ammo);
+            _isFire = false;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.GetComponent<DropAmmoController>() is {} ammoDropController)
+            {
+                _ammo += ammoDropController.TakeDropAmmo();
+                _uiController.ShowAmountAmmo(_ammo);
+            }
         }
     }
 }

@@ -1,65 +1,67 @@
 using System.Collections;
 using UnityEngine;
 using Zenject;
-using Zombie_Platformer.Infrastructure;
 
-public class EnemySpawner : MonoBehaviour, IEnemySpawner
+namespace Zombie_Platformer.Infrastructure
 {
-    private IFactoryActors _factoryActors;
-    private IGameProcess _gameProcess;
-
-    private Vector3 _targetPos;
-
-    [Inject]
-    private void Constructor(IFactoryActors factoryActors, IGameProcess gameProcess)
+    public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
-        _gameProcess = gameProcess;
-        _factoryActors = factoryActors;
-    }
+        private IFactoryActors _factoryActors;
+        private IGameProcess _gameProcess;
 
-    public void StartSpawner(Transform targetPos)
-    {
-        StartCoroutine(SpawnEnemies(targetPos));
-    }
+        private Vector3 _targetPos;
 
-    private IEnumerator SpawnEnemies(Transform targetPos)
-    {
-        WaitForSeconds waitForSeconds = new (Random.Range(1, 10));
-        
-        while (!_gameProcess.IsGameOver)
+        [Inject]
+        private void Constructor(IFactoryActors factoryActors, IGameProcess gameProcess)
         {
-            Vector3 spawnPos = targetPos.position;
-            spawnPos.x += Random.value > 0.5f ? -12 : 12;
+            _gameProcess = gameProcess;
+            _factoryActors = factoryActors;
+        }
 
-            switch (Random.Range(0, 5))
+        public void StartSpawner(Transform targetPos)
+        {
+            StartCoroutine(SpawnEnemies(targetPos));
+        }
+
+        private IEnumerator SpawnEnemies(Transform targetPos)
+        {
+            WaitForSeconds waitForSeconds = new(Random.Range(1, 10));
+
+            while (!_gameProcess.IsGameOver)
             {
-                case 0:
-                    _factoryActors.CreateBaseEnemy(spawnPos, targetPos.position);
-                    break;
-                
-                case 1:
-                    _factoryActors.CreateAdvanceEnemy(spawnPos, targetPos.position);
-                    break;
-                
-                case 2:
-                    _factoryActors.CreateEliteEnemy(spawnPos, targetPos.position);
-                    break;
-                
-                case 3:
-                    _factoryActors.CreateTankEnemy(spawnPos, targetPos.position);
-                    break;
-                
-                case 4:
-                    _factoryActors.CreateFastEnemy(spawnPos, targetPos.position);
-                    break;
-                
-                default:
-                    _factoryActors.CreateBaseEnemy(spawnPos, targetPos.position);
-                    break;
-            }
-            
+                Vector3 spawnPos = targetPos.position;
+                spawnPos.x += Random.value > 0.5f ? -12 : 12;
 
-            yield return waitForSeconds;
+                switch (Random.Range(0, 5))
+                {
+                    case 0:
+                        _factoryActors.CreateBaseEnemy(spawnPos, targetPos.position);
+                        break;
+
+                    case 1:
+                        _factoryActors.CreateAdvanceEnemy(spawnPos, targetPos.position);
+                        break;
+
+                    case 2:
+                        _factoryActors.CreateEliteEnemy(spawnPos, targetPos.position);
+                        break;
+
+                    case 3:
+                        _factoryActors.CreateTankEnemy(spawnPos, targetPos.position);
+                        break;
+
+                    case 4:
+                        _factoryActors.CreateFastEnemy(spawnPos, targetPos.position);
+                        break;
+
+                    default:
+                        _factoryActors.CreateBaseEnemy(spawnPos, targetPos.position);
+                        break;
+                }
+
+
+                yield return waitForSeconds;
+            }
         }
     }
 }

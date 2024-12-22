@@ -1,37 +1,41 @@
 using UnityEngine;
 using Zenject;
+using Zombie_Platformer.Infrastructure;
 
-public class EnemyMoveComponent : MonoBehaviour
+namespace Zombie_Platformer.Enemy
 {
-    [SerializeField] private Animator _animator;
-    
-    private float _speed;
-    private IGameProcess _gameProcess;
-
-    [Inject]
-    private void Constructor(Configs configs, IGameProcess gameProcess)
+    public class EnemyMoveComponent : MonoBehaviour
     {
-        _gameProcess = gameProcess;
-    }
+        [SerializeField] private Animator _animator;
 
-    public void Init(Vector3 targetPos, EnemyConfigSource enemyConfig)
-    {
-        _speed = enemyConfig.Speed;
+        private float _speed;
+        private IGameProcess _gameProcess;
 
-        if (targetPos.x < transform.position.x)
+        [Inject]
+        private void Constructor(Configs configs, IGameProcess gameProcess)
         {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
+            _gameProcess = gameProcess;
         }
-    }
-    
-    void FixedUpdate()
-    {
-        if (_gameProcess.IsGameOver)
+
+        public void Init(Vector3 targetPos, EnemyConfigSource enemyConfig)
         {
-            _animator.enabled = false;
-            return;
+            _speed = enemyConfig.Speed;
+
+            if (targetPos.x < transform.position.x)
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
         }
-        
-        transform.Translate(_speed * Time.deltaTime, 0, 0);
+
+        void FixedUpdate()
+        {
+            if (_gameProcess.IsGameOver)
+            {
+                _animator.enabled = false;
+                return;
+            }
+
+            transform.Translate(_speed * Time.deltaTime, 0, 0);
+        }
     }
 }

@@ -1,45 +1,49 @@
 using UnityEngine;
 using Zenject;
+using Zombie_Platformer.Infrastructure;
 
-public class Enemy : MonoBehaviour
+namespace Zombie_Platformer.Enemy
 {
-    [SerializeField] private HealthBar _healthBar;
-    [SerializeField] private DamageController _damageController;
-    [SerializeField] private GameObject _zombieDeadEffectPrefab;
-    
-    private IFactoryDrop _factoryDrop;
-
-    [Inject]
-    private void Constructor(IFactoryDrop factoryDrop)
+    public class Enemy : MonoBehaviour
     {
-        _factoryDrop = factoryDrop;
-    }
+        [SerializeField] private HealthBar _healthBar;
+        [SerializeField] private DamageController _damageController;
+        [SerializeField] private GameObject _zombieDeadEffectPrefab;
 
-    public void Init(EnemyConfigSource enemyConfig)
-    {
-        _healthBar.Init(enemyConfig.Hp);
-        _damageController.Init(enemyConfig.Hp);
+        private IFactoryDrop _factoryDrop;
 
-        _damageController.OnTakeDamage += SyncHealthBar;
-        _damageController.OnHealthEnded += HealthEnded;
-    }
+        [Inject]
+        private void Constructor(IFactoryDrop factoryDrop)
+        {
+            _factoryDrop = factoryDrop;
+        }
 
-    private void SyncHealthBar(float currentHealth)
-    {
-        _healthBar.SyncHealthBar(currentHealth);
-    }
+        public void Init(EnemyConfigSource enemyConfig)
+        {
+            _healthBar.Init(enemyConfig.Hp);
+            _damageController.Init(enemyConfig.Hp);
 
-    private void HealthEnded()
-    {
-        _factoryDrop.CreateDropAmmo(transform.position, Random.Range(2,8));
-        Instantiate(_zombieDeadEffectPrefab);
-        
-        Destroy(gameObject);
-    }
+            _damageController.OnTakeDamage += SyncHealthBar;
+            _damageController.OnHealthEnded += HealthEnded;
+        }
 
-    private void OnDestroy()
-    {
-        _damageController.OnTakeDamage -= SyncHealthBar;
-        _damageController.OnHealthEnded -= HealthEnded;
+        private void SyncHealthBar(float currentHealth)
+        {
+            _healthBar.SyncHealthBar(currentHealth);
+        }
+
+        private void HealthEnded()
+        {
+            _factoryDrop.CreateDropAmmo(transform.position, Random.Range(2, 8));
+            Instantiate(_zombieDeadEffectPrefab);
+
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            _damageController.OnTakeDamage -= SyncHealthBar;
+            _damageController.OnHealthEnded -= HealthEnded;
+        }
     }
 }

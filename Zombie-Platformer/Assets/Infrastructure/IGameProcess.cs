@@ -1,7 +1,10 @@
 ﻿using System;
 
-public interface IGameProcess
+namespace Zombie_Platformer.Infrastructure
 {
-    public Action OnGameOver { get; set; }
-    public bool IsGameOver { get; set; }
+    public interface IGameProcess
+    {
+        public Action OnGameOver { get; set; }
+        public bool IsGameOver { get; set; }
+    }
 }

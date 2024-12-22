@@ -2,28 +2,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIController : MonoBehaviour, IUIController
+namespace Zombie_Platformer.Infrastructure
 {
-    [SerializeField] private TMP_Text _ammoCountText;
-    [SerializeField] private GameObject _endWindow;
-
-    public void ShowAmountAmmo(int ammoCount)
+    public class UIController : MonoBehaviour, IUIController
     {
-        _ammoCountText.text = ammoCount.ToString();
-    }
+        [SerializeField] private TMP_Text _ammoCountText;
+        [SerializeField] private GameObject _endWindow;
 
-    public void ShowEndWindow()
-    {
-        _endWindow.SetActive(true);
-    }
+        public void ShowAmountAmmo(int ammoCount)
+        {
+            _ammoCountText.text = ammoCount.ToString();
+        }
 
-    public void OnRestartSelected()
-    {
-        SceneManager.LoadScene(0);
-    }
+        public void ShowEndWindow()
+        {
+            _endWindow.SetActive(true);
+        }
 
-    public void OnExitSelected()
-    {
-        Application.Quit();
+        public void OnRestartSelected()
+        {
+            SceneManager.LoadScene(0);
+        }
+
+        public void OnExitSelected()
+        {
+            Application.Quit();
+        }
     }
 }

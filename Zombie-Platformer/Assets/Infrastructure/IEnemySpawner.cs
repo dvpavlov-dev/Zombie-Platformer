@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IEnemySpawner
+namespace Zombie_Platformer.Infrastructure
 {
-    public void StartSpawner(Transform targetPos);
+    public interface IEnemySpawner
+    {
+        public void StartSpawner(Transform targetPos);
+    }
 }

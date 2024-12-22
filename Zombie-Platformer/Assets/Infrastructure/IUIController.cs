@@ -1,5 +1,8 @@
-﻿public interface IUIController
+﻿namespace Zombie_Platformer.Infrastructure
 {
-    public void ShowAmountAmmo(int ammoCount);
-    public void ShowEndWindow();
+    public interface IUIController
+    {
+        public void ShowAmountAmmo(int ammoCount);
+        public void ShowEndWindow();
+    }
 }

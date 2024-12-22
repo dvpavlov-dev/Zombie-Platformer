@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6896baddc8b4dbf8d77689bbda2ef57, type: 3}
   m_Name: TankEnemyConfig
   m_EditorClassIdentifier: 
-  Hp: 0
-  Speed: 0
+  Hp: 50
+  Speed: 1

@@ -1,25 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+namespace Zombie_Platformer.Enemy
 {
-    [SerializeField] private Image _healthImage;
-
-    private float _maxHealth;
-
-    public void Init(float maxHealth)
+    public class HealthBar : MonoBehaviour
     {
-        _maxHealth = maxHealth;
-    }
-    
-    public void SyncHealthBar(float currentHealth)
-    {
-        if (currentHealth <= 0)
+        [SerializeField] private Image _healthImage;
+
+        private float _maxHealth;
+
+        public void Init(float maxHealth)
         {
-            _healthImage.fillAmount = 0;
-            return;
+            _maxHealth = maxHealth;
         }
-        
-        _healthImage.fillAmount = currentHealth / _maxHealth;
+
+        public void SyncHealthBar(float currentHealth)
+        {
+            if (currentHealth <= 0)
+            {
+                _healthImage.fillAmount = 0;
+                return;
+            }
+
+            _healthImage.fillAmount = currentHealth / _maxHealth;
+        }
     }
 }

@@ -1,26 +1,29 @@
 using System;
 using UnityEngine;
 
-public class DamageController : MonoBehaviour
+namespace Zombie_Platformer.Enemy
 {
-    public Action<float> OnTakeDamage;
-    public Action OnHealthEnded;
-    
-    private float _currentHealth;
-    
-    public void Init(float health)
+    public class DamageController : MonoBehaviour
     {
-        _currentHealth = health;
-    }
+        public Action<float> OnTakeDamage;
+        public Action OnHealthEnded;
 
-    public void TakeDamage(float damage)
-    {
-        _currentHealth -= damage;
-        OnTakeDamage?.Invoke(_currentHealth);
+        private float _currentHealth;
 
-        if (_currentHealth <= 0)
+        public void Init(float health)
         {
-            OnHealthEnded?.Invoke();
+            _currentHealth = health;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            _currentHealth -= damage;
+            OnTakeDamage?.Invoke(_currentHealth);
+
+            if (_currentHealth <= 0)
+            {
+                OnHealthEnded?.Invoke();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Zenject;
+using Zombie_Platformer.Enemy;
 
 namespace Zombie_Platformer.Infrastructure
 {
@@ -58,7 +59,7 @@ namespace Zombie_Platformer.Infrastructure
         {
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-            enemy.GetComponent<Enemy>().Init(enemyConfig);
+            enemy.GetComponent<Enemy.Enemy>().Init(enemyConfig);
             enemy.GetComponent<EnemyMoveComponent>().Init(targetPos, enemyConfig);
             return enemy;
         }

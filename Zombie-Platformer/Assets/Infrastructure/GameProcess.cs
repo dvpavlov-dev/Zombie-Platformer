@@ -1,22 +1,25 @@
 using System;
 
-public class GameProcess : IGameProcess
+namespace Zombie_Platformer.Infrastructure
 {
-    public Action OnGameOver { get; set; }
-
-    private bool _isGameOver;
-
-    public bool IsGameOver
+    public class GameProcess : IGameProcess
     {
-        get => _isGameOver;
-        set
+        public Action OnGameOver { get; set; }
+
+        private bool _isGameOver;
+
+        public bool IsGameOver
         {
-            if (value)
+            get => _isGameOver;
+            set
             {
-                OnGameOver?.Invoke();
+                if (value)
+                {
+                    OnGameOver?.Invoke();
+                }
+
+                _isGameOver = value;
             }
-            
-            _isGameOver = value;
         }
     }
 }

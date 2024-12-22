@@ -1,52 +1,56 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Zombie_Platformer.Player;
 
-public class FactoryBullet : MonoBehaviour, IFactoryBullet
+namespace Zombie_Platformer.Infrastructure
 {
-    [SerializeField] private GameObject _bulletPrefab;
-
-    private Queue<GameObject> _bulletsPool = new();
-    private GameObject _containerForBullets;
-
-    private void Start()
+    public class FactoryBullet : MonoBehaviour, IFactoryBullet
     {
-        CreateBulletsPool();
-    }
+        [SerializeField] private GameObject _bulletPrefab;
 
-    public GameObject GetBullet(Vector3 dir, float damage)
-    {
-        if (_bulletsPool.Count == 0)
+        private Queue<GameObject> _bulletsPool = new();
+        private GameObject _containerForBullets;
+
+        private void Start()
         {
-            CreateBullet();
+            CreateBulletsPool();
         }
-        
-        GameObject bullet = _bulletsPool.Dequeue();
-        bullet.GetComponent<BulletController>().Init(this, dir, damage);
-        bullet.SetActive(true);
 
-        return bullet;
-    }
-
-    public void DisposeBullet(GameObject bullet)
-    {
-        bullet.SetActive(false);
-        _bulletsPool.Enqueue(bullet);
-    }
-
-    private void CreateBulletsPool()
-    {
-        _containerForBullets = new GameObject("Container for bullet");
-        
-        for (int i = 0; i < 10; i++)
+        public GameObject GetBullet(Vector3 dir, float damage)
         {
-            CreateBullet();
+            if (_bulletsPool.Count == 0)
+            {
+                CreateBullet();
+            }
+
+            GameObject bullet = _bulletsPool.Dequeue();
+            bullet.GetComponent<BulletController>().Init(this, dir, damage);
+            bullet.SetActive(true);
+
+            return bullet;
         }
-    }
-    
-    private void CreateBullet()
-    {
-        GameObject bullet = Instantiate(_bulletPrefab, _containerForBullets.transform);
-        bullet.SetActive(false);
-        _bulletsPool.Enqueue(bullet);
+
+        public void DisposeBullet(GameObject bullet)
+        {
+            bullet.SetActive(false);
+            _bulletsPool.Enqueue(bullet);
+        }
+
+        private void CreateBulletsPool()
+        {
+            _containerForBullets = new GameObject("Container for bullet");
+
+            for (int i = 0; i < 10; i++)
+            {
+                CreateBullet();
+            }
+        }
+
+        private void CreateBullet()
+        {
+            GameObject bullet = Instantiate(_bulletPrefab, _containerForBullets.transform);
+            bullet.SetActive(false);
+            _bulletsPool.Enqueue(bullet);
+        }
     }
 }

@@ -1,17 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieDeadController : MonoBehaviour
+namespace Zombie_Platformer.Enemy
 {
-    [SerializeField] private AudioSource _audioSource;
-
-    [SerializeField] private List<AudioClip> _deadSounds;
-    
-    void Start()
+    public class ZombieDeadController : MonoBehaviour
     {
-        _audioSource.clip = _deadSounds[Random.Range(0, _deadSounds.Count)];
-        _audioSource.Play();
-        
-        Destroy(gameObject,  _audioSource.clip.length);
+        [SerializeField] private AudioSource _audioSource;
+
+        [SerializeField] private List<AudioClip> _deadSounds;
+
+        void Start()
+        {
+            _audioSource.clip = _deadSounds[Random.Range(0, _deadSounds.Count)];
+            _audioSource.Play();
+
+            Destroy(gameObject, _audioSource.clip.length);
+        }
     }
 }
