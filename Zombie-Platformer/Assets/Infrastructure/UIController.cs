@@ -7,7 +7,7 @@ public class UIController : MonoBehaviour, IUIController
     [SerializeField] private TMP_Text _ammoCountText;
     [SerializeField] private GameObject _endWindow;
 
-    public void ShowAmmoCount(int ammoCount)
+    public void ShowAmountAmmo(int ammoCount)
     {
         _ammoCountText.text = ammoCount.ToString();
     }

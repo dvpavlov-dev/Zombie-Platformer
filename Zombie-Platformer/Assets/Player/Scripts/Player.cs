@@ -3,6 +3,9 @@ using Zenject;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _deadSound;
+    
     private IGameProcess _gameProcess;
     
     private const string ENEMY_TAG = "Enemy";
@@ -17,6 +20,9 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag(ENEMY_TAG))
         {
+            _audioSource.clip = _deadSound;
+            _audioSource.Play();
+            
             _gameProcess.IsGameOver = true;
         }
     }

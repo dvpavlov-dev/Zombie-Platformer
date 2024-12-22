@@ -6,6 +6,7 @@ public class PlayerAttackComponent : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private Transform _shootPoint;
+    [SerializeField] private AudioSource _audioSource;
     
     private IInputService _inputService;
     private IFactoryBullet _factoryBullet;
@@ -29,7 +30,7 @@ public class PlayerAttackComponent : MonoBehaviour
     private void Start()
     {
         _ammo = _configs.WeaponConfig.StartAmmo;
-        _uiController.ShowAmmoCount(_ammo);
+        _uiController.ShowAmountAmmo(_ammo);
     }
 
     void Update()
@@ -47,8 +48,9 @@ public class PlayerAttackComponent : MonoBehaviour
             bullet.transform.position = _shootPoint.position;
 
             _ammo--;
-            _uiController.ShowAmmoCount(_ammo);
+            _uiController.ShowAmountAmmo(_ammo);
             _animator.SetBool("Fire", true);
+            _audioSource.Play();
 
             if (_ammo <= 0)
             {
@@ -69,10 +71,8 @@ public class PlayerAttackComponent : MonoBehaviour
     {
         if (other.GetComponent<DropAmmoController>() is {} ammoDropController)
         {
-            _ammo += ammoDropController.AmountAmmo;
-            _uiController.ShowAmmoCount(_ammo);
-            
-            Destroy(other.gameObject);
+            _ammo += ammoDropController.TakeDropAmmo();
+            _uiController.ShowAmountAmmo(_ammo);
         }
     }
 }
