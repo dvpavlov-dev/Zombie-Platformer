@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 7304463203833277726}
   - component: {fileID: 324122357266215201}
   - component: {fileID: 3799319877286455739}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DropAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
