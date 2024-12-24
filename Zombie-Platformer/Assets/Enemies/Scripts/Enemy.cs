@@ -34,7 +34,7 @@ namespace Zombie_Platformer.Enemy
 
         private void HealthEnded()
         {
-            _factoryDrop.CreateDropAmmo(transform.position, Random.Range(2, 8));
+            _factoryDrop.CreateDropAmmo(transform.position, Random.Range(5, 8));
             Instantiate(_zombieDeadEffectPrefab);
 
             Destroy(gameObject);

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EliteEnemyConfig
   m_EditorClassIdentifier: 
   Hp: 30
-  Speed: 4
+  Speed: 3
