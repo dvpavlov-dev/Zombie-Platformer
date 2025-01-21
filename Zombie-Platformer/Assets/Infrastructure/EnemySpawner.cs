@@ -25,7 +25,7 @@ namespace Zombie_Platformer.Infrastructure
 
         private IEnumerator SpawnEnemies(Transform targetPos)
         {
-            WaitForSeconds waitForSeconds = new(Random.Range(1, 10));
+            WaitForSeconds waitForSeconds = new(Random.Range(3, 6));
 
             while (!_gameProcess.IsGameOver)
             {
